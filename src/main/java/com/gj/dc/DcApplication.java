@@ -13,6 +13,10 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -26,17 +30,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.xiuye.util.log.LogUtil;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class,
+		DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @EnableCaching
 @EnableScheduling
-public class DcApplication /* extends CachingConfigurerSupport */{
+public class DcApplication /* extends CachingConfigurerSupport */ {
 
-	@CacheEvict(allEntries = true,cacheNames = {"json"})
+	@CacheEvict(allEntries = true, cacheNames = { "json" })
 	@Scheduled(fixedDelay = 20000)
 	public void timer() {
 		LogUtil.log("clear all caches!!!");
 	}
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(DcApplication.class, args);
 	}

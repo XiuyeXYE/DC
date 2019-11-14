@@ -16,8 +16,8 @@ import com.xiuye.util.log.LogUtil;
 @Service
 public class JsonServiceImpl implements JsonService{
 	
-	@Resource
-	private RedisTemplate<?, ?> redisTemplate;
+//	@Resource
+//	private RedisTemplate<?, ?> redisTemplate;
 	
 	@Resource
 	private Gson gson;
@@ -35,7 +35,7 @@ public class JsonServiceImpl implements JsonService{
 
 		LogUtil.log("Be called!!!");
 
-		LogUtil.log("redisTemplate=",redisTemplate);
+//		LogUtil.log("redisTemplate=",redisTemplate);
 		
 		return res;
 	}
