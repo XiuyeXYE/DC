@@ -1,4 +1,4 @@
-package com.gj.dc.controller;
+package com.xy.controller;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gj.dc.service.JsonService;
+import com.xy.service.JsonService;
 
 
 @RestController

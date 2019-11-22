@@ -1,4 +1,4 @@
-package com.gj.dc.service;
+package com.xy.service;
 
 import java.util.Map;
 
