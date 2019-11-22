@@ -1,4 +1,4 @@
-package com.xy;
+package com.xy.bean;
 
 import java.util.HashMap;
 
