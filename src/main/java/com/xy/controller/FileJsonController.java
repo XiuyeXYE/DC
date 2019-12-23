@@ -2,8 +2,8 @@ package com.xy.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +52,7 @@ public class FileJsonController {
 		String filename = this.randomFileName();
 		filename = filename + sfx;
 		String path = directory + File.separator;
-		Files.createFile(Paths.get(path + filename));
+		Files.copy(file.getInputStream(), Paths.get(path + filename));
 		Map<String, Object> fileInfo = TypeUtil.createMap();
 		fileInfo.put("date", date);
 		fileInfo.put("filename", filename);
@@ -104,7 +105,18 @@ public class FileJsonController {
 		}
 		return Result.OK(ps);
 	}
-	
-	
+
+	@RequestMapping("requestFile")
+	public void requestFile(@RequestParam Map<String, Object> params, HttpServletResponse res) throws IOException {
+
+		String filename = TypeUtil.dynamic_cast(params.get("filename"));
+		OutputStream os = res.getOutputStream();
+		Path path = Paths.get(filename);
+		if (Files.exists(path)) {
+			LogUtil.log(Files.readAllBytes(path));
+			os.write(Files.readAllBytes(path));
+		}
+
+	}
 
 }
