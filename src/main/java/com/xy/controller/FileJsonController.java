@@ -1,5 +1,6 @@
 package com.xy.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -27,6 +28,7 @@ import com.xy.bean.Result;
 public class FileJsonController {
 
 	private static final String ROOT = "/var/files/";
+	private static final String TMP = "/tmp/files/";
 
 	private String randomFileName() {
 		return UUID.randomUUID().toString().replace("-", "");
@@ -41,24 +43,28 @@ public class FileJsonController {
 	private Map<String, Object> uploadFileHandler(MultipartFile file) throws IOException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
 		String date = sdf.format(new Date());
-		Path directory = Paths.get(ROOT + date + "/");
+		Path directory = Paths.get(TMP + date);
 		if (Files.notExists(directory)) {
 			directory = Files.createDirectories(directory);
 		}
 		String sfx = this.suffix(file.getOriginalFilename());
 		String filename = this.randomFileName();
-		filename = directory + filename + sfx;
-		Files.createFile(Paths.get(filename));
+		filename = filename + sfx;
+		String path = directory + File.separator;
+		Files.createFile(Paths.get(path + filename));
 		Map<String, Object> fileInfo = TypeUtil.createMap();
 		fileInfo.put("date", date);
-		fileInfo.put("path", filename);
+		fileInfo.put("filename", filename);
+		fileInfo.put("path", path);
 		return fileInfo;
 	}
 
 	@RequestMapping("singleFileUpload")
 	public Result singleFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest req)
 			throws IOException {
-		return Result.OK(this.uploadFileHandler(file));
+		List<Map<String, Object>> list = TypeUtil.createList();
+		list.add(this.uploadFileHandler(file));
+		return Result.OK(list);
 	}
 
 	@RequestMapping("multipleFileUpload")
@@ -72,14 +78,33 @@ public class FileJsonController {
 	}
 
 	@RequestMapping("moveFile")
-	public Result moveFile(@RequestBody Map<String,Object> params) {
-		
-		return Result.OK();
-	}
+	public Result moveFile(@RequestBody Map<String, Object> params) throws IOException {
+		List<Map<String, Object>> ps = TypeUtil.createList();
+		List<Map<String, Object>> fileInfos = TypeUtil.dynamic_cast(params.get("data"));
+		for (Map<String, Object> file : fileInfos) {
+			String date = TypeUtil.dynamic_cast(file.get("date"));
+			String filename = TypeUtil.dynamic_cast(file.get("filename"));
+			String path = TypeUtil.dynamic_cast(file.get("path"));
 
-	public static void main(String[] args) {
-		LogUtil.log("123".substring("123".length()));
+			String directoryDir = ROOT + date;
+			Path directory = Paths.get(directoryDir);
+			if (Files.notExists(directory)) {
+				Files.createDirectories(directory);
+			}
 
+			Path source = Paths.get(path + filename);
+			file.put("moved", false);
+			if (Files.exists(source)) {
+				Files.move(source, Paths.get(directoryDir + File.separator + filename));
+				file.put("moved", true);
+			}
+
+			file.put("path", directoryDir);
+			ps.add(file);
+		}
+		return Result.OK(ps);
 	}
+	
+	
 
 }
