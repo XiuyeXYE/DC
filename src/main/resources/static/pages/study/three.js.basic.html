@@ -8,6 +8,7 @@
 	<h1>Base</h1>
 
 	<script type="text/javascript" src="/3rd/three.js/three.js"></script>
+	<script type="text/javascript" src="/3rd/three.js/plugins/WebGL.js"></script>
 	<script type="text/javascript" src="/3rd/xy/xy2.js"></script>
 	<script type="text/javascript">
 		let scene = new THREE.Scene();
@@ -21,9 +22,18 @@
 		let material = new THREE.MeshBasicMaterial({color:0x00ff00});
 		let cube = new THREE.Mesh(geometry,material);
 		scene.add(cube);
-		caemra.position.z = 5;
-		
-		
+		camera.position.z = 5;
+		function animate(){
+			requestAnimationFrame(animate);
+			
+			//cube.rotation.x += 0.01;
+			//cube.rotation.y += 0.01;
+			cube.rotation.z += 0.01;
+			
+			renderer.render(scene,camera);
+		}
+		animate();
+		console.log(THREE.WEBGL);
 		
 	</script>
 </body>
