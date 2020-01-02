@@ -34,7 +34,7 @@ void main() {
 </script>
 	<script type="text/javascript">
 		let scene = new THREE.Scene();
-		let camera = new THREE.PerspectiveCamera(75, window.innerWidth
+		let camera = new THREE.PerspectiveCamera(0, window.innerWidth
 				/ window.innerHeight, 0.1, 1000);
 		let canvas = document.createElement('canvas');
 		let context = canvas.getContext('webgl2', {
@@ -62,8 +62,11 @@ void main() {
 		let cube = new THREE.Mesh(geometry, material);
 		scene.add(cube);
 		camera.position.z = 5;
+		let smalling = true;
+		var locked = false;
 		function animate() {
-			requestAnimationFrame(animate);
+			if (!locked)
+				requestAnimationFrame(animate);
 
 			//cube.rotation.x += Math.PI/4;
 			//cube.rotation.y += Math.PI/4;
@@ -72,6 +75,20 @@ void main() {
 			cube.rotation.y += 0.01;
 			cube.rotation.z += 0.01;
 
+			camera.fov = camera.fov % 360 + 1;
+//			console.log(camera.fov, camera.getEffectiveFOV());
+			//console.log(camera.getFilmWidth () ,camera.getFilmHeight());
+			//console.log(camera.getFocalLength ());
+			
+			/*camera.fov += smalling ? 1 : -1;
+
+			 if (camera.fov == 180) {
+				smalling = false;
+			} else if (camera.fov == 0) {
+				smalling = true
+			} */
+
+			camera.updateProjectionMatrix();
 			renderer.render(scene, camera);
 		}
 		//animate();
