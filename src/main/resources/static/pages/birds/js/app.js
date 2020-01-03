@@ -14,7 +14,8 @@ function init() {
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0x8FBCD4 );
-
+  let axes = new THREE.AxesHelper(20);
+  scene.add(axes);
   createCamera();
   createControls();
   createLights();
