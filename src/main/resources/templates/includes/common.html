@@ -1,0 +1,57 @@
+<head th:fragment="header">
+
+</head>
+<div th:fragment="footer">
+	<script src="/3rd/xy/xy2.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		//xy.DEBUG = false;
+	</script>
+</div>
+<div th:fragment="extension">
+	<script type="text/javascript">
+	
+		
+	
+		function checkXY2Dependencies(){
+			if(!$){
+				throw "I need jQuery,you know?";
+			}
+			if(!xy){
+				throw "I need xy framework(it's my developing js-lib),you know?";
+			}
+		}
+		
+		function XOption(text,value,selected){
+			checkXY2Dependencies();
+			
+			let optionStr = `<option value=${value?value:''} ${selected?'selected':''}>
+						${text}
+					</option>
+			`;
+			
+			
+			return $(optionStr);
+		}
+		
+		function GetData(url,data,callback,type='post',error){
+			checkXY2Dependencies();
+			$.ajax({
+				url,
+				type,
+				data,
+				success(d){
+					//console.log(d);
+					if(xy.fnExist(callback)){
+						callback(d);
+					}
+				}
+				,
+				error
+			});
+		}
+	
+		
+		
+	</script>
+
+</div>

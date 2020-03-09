@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+html, body {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body::-webkit-scrollbar { /* 血槽宽度 */
+	width: 5px;
+	height: 5px;
+}
+
+body::-webkit-scrollbar-thumb { /* 拖动条 */
+	background-color: #ddd;
+	border-radius: 6px;
+}
+
+body::-webkit-scrollbar-thumb:hover { /* 拖动条 */
+	background-color: #333;
+}
+
+body::-webkit-scrollbar-track { /* 背景槽 */
+	border-radius: 6px;
+}
+
+div.layout {
+	border: 1px solid red;
+	width: 100%;
+	height: 100%;
+}
+
+div.leftSidebar {
+	border: 1px solid green;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 220px;
+	height: 100%;
+}
+
+div.rightContent {
+	border: 1px solid blue;
+	width: 100%;
+	height: 100%;
+	padding-left: 220px;
+}

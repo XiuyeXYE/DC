@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>首页</title>
+<link rel="shortcut icon" href="favicon.ico">
+<!-- <link href="/3rd/bootstrap-3.3.7-dist/css/bootstrap.css"
+	th:href="@{/3rd/bootstrap-3.3.7-dist/css/bootstrap.css}" rel="stylesheet"> -->
+<link href="/css/index.css" rel="stylesheet">
+<head th:include="includes/common :: header"></head>
+	
+</head>
+<body>
+	
+	<div class="layout">
+		<div class="leftSidebar"></div>
+		<div class="rightContent"></div>
+	</div>
+	
+	<div th:include="includes/common :: footer"></div>
+	<div th:include="includes/common :: extension"></div>
+</body>
+</html>
