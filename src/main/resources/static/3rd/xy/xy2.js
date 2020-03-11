@@ -2791,7 +2791,10 @@
     //20.new tools 
     //source file and code line
     function sourceFileAndCodeLine(n) {
-        var stack = new Error().stack;
+        //var stack = new Error().stack;
+        var obj = EMPTY_VALUES.OBJECT;
+        Error.captureStackTrace(obj, sourceFileAndCodeLine);
+        var stack = obj.stack;
         var ss = stack.split('at');
         return ss[n].trim();
     }
@@ -2951,14 +2954,14 @@
 function println() {
     if (xy.STDOUT_OPENED && console && console.log) {
         var params = xy.arrayLike2Array(arguments);
-        params.push('Source:' + xy.sourceFileAndCodeLine(3));
+        params.push('Source:' + xy.sourceFileAndCodeLine(2));
         console.log.apply(console, params);
     }
 }
 function xdebug() {
     if (xy.DEBUG && console && console.log) {
         var params = xy.arrayLike2Array(arguments);
-        params.push('Source:' + xy.sourceFileAndCodeLine(3));
+        params.push('Source:' + xy.sourceFileAndCodeLine(2));
         console.log.apply(console, params);
     }
 }
