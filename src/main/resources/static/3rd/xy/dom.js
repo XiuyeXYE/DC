@@ -380,9 +380,29 @@ xy.add(
 		create: function (tag) { // static dom_impl
 			return new this(document.createElement(tag));
 		}
-	}
+	},
+	true
 );
+
+
+
+xy.impl(xy.Dom,{
+	event(e,c){
+		this.get().addEventListener(e,c);
+	}
+});
+
+
 
 xy.add(function crtDom(tag) {
 	return this.Dom.create(tag);
 });
+
+xy.add(function ready(c){
+	this.Dom.of(document).event('DOMContentLoaded',c);
+});
+
+xy.ready(()=>{
+	xdebug("ready is OK!");
+});
+
