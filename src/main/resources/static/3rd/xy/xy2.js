@@ -2799,6 +2799,27 @@
         return ss[n].trim();
     }
 
+    function define(c, members, staticMembers) {
+        if (fnExist(c) && strNonEmpty(c.name)) {
+            impl(c, members);
+            static_impl(c, staticMembers);
+            return c;
+        } else {
+            throw new Error("First parameter must be named function!");
+        }
+    }
+
+    function add(c, members, staticMembers) {//class or function
+        if (fnExist(c) && strNonEmpty(c.name)) {
+            c = define(c, members, staticMembers);
+            xy[c.name] = c;
+        }
+        else {
+            throw new Error("First parameter must be named function!");
+        }
+    }
+
+
 
 
 
@@ -2886,6 +2907,8 @@
         static_impl: static_impl,
         inf_ext: inf_ext,
         inst_of: inst_of,
+        define: define,
+        add: add,
         notInstanceof: notInstanceof,
         ntfs: ntfs,
         sourceFileAndCodeLine: sourceFileAndCodeLine
