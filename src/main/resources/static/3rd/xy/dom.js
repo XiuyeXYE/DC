@@ -401,6 +401,9 @@ xy.add(function crtDom(tag) {
 xy.add(function ready(c){
 	this.Dom.of(document).event('DOMContentLoaded',c);
 });
+xy.cover(function ready(c){
+	this.Dom.of(document).event('DOMContentLoaded',c);
+});
 
 xy.ready(()=>{
 	xdebug("ready is OK!");
