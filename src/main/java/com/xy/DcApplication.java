@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -27,6 +28,8 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import com.xiuye.util.log.LogUtil;
 
@@ -34,6 +37,8 @@ import com.xiuye.util.log.LogUtil;
 		DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @EnableCaching
 @EnableScheduling
+//@EnableWebSocket
+@ServletComponentScan("com.xy.controller")
 public class DcApplication /* extends CachingConfigurerSupport */ {
 
 	@CacheEvict(allEntries = true, cacheNames = { "json" })
@@ -63,6 +68,11 @@ public class DcApplication /* extends CachingConfigurerSupport */ {
 		chainDefinition.addPathDefinition("/logout", "logout");
 		return chainDefinition;
 	}
+
+//	@Bean
+//	public ServerEndpointExporter websocket() {
+//		return new ServerEndpointExporter();
+//	}
 
 //	@Bean
 //	public CacheManager cacheManager() {

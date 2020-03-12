@@ -415,10 +415,13 @@ xy.D(function query(op){
 	
 });
 
-xy.ready(()=>{
-	xdebug("ready is OK!");
-});
+//xy.ready(()=>{
+//	xdebug("ready is OK!");
+//});
+//
+//xy("ready",()=>{
+//	xdebug("ready is OK!2");
+//})
 
-xy("ready",()=>{
-	xdebug("ready is OK!2");
-})
+
+
