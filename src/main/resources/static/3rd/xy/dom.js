@@ -127,12 +127,11 @@ if (!xy) {
 // }
 
 // html element
-xy.add(
+xy.D(
 	function Dom(node) {
 		xy.notInstanceof(this, Dom, 'Constructor Dom requires "new"!');
 		this.init(node);
 	},
-
 	// basic
 	{// Dom_impl
 		// real constructor
@@ -374,7 +373,6 @@ xy.add(
 				this.attr('value', v);
 			}
 		}
-
 	},
 	{
 		create: function (tag) { // static dom_impl
@@ -386,7 +384,13 @@ xy.add(
 
 
 
-xy.impl(xy.Dom,{
+// xy.impl(xy.Dom,{
+// event(e,c){
+// this.get().addEventListener(e,c);
+// }
+// });
+
+xy.I('Dom',{
 	event(e,c){
 		this.get().addEventListener(e,c);
 	}
@@ -394,18 +398,27 @@ xy.impl(xy.Dom,{
 
 
 
-xy.add(function crtDom(tag) {
+
+
+xy.D(function createDom(tag) {
 	return this.Dom.create(tag);
 });
 
-xy.add(function ready(c){
+xy.D(function ready(c){
 	this.Dom.of(document).event('DOMContentLoaded',c);
 });
-xy.cover(function ready(c){
-	this.Dom.of(document).event('DOMContentLoaded',c);
+// xy.cover(function ready(c){
+// this.Dom.of(document).event('DOMContentLoaded',c);
+// });
+
+xy.D(function query(op){
+	
 });
 
 xy.ready(()=>{
 	xdebug("ready is OK!");
 });
 
+xy("ready",()=>{
+	xdebug("ready is OK!2");
+})

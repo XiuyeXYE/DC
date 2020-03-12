@@ -2740,6 +2740,20 @@
         }
     }
 
+    function I() {
+        var ps = arrayLike2Array(arguments);
+        if (pgt(ps, 1) && strNonEmpty(ps[0]) && fnExist(ps[0] = xy[ps[0]])) {
+            impl.apply(xy, ps);
+        }
+    }
+
+    function S() {
+        var ps = arrayLike2Array(arguments);
+        if (pgt(ps, 1) && strNonEmpty(ps[0]) && fnExist(ps[0] = xy[ps[0]])) {
+            static_impl.apply(xy, ps);
+        }
+    }
+
 
 
     //9.Open API functions
@@ -2823,6 +2837,9 @@
         ext: ext,
         impl: impl,
         static_impl: static_impl,
+        I: I,//for xy inner function
+        S: S,//for xy inner function
+        D: add,//for xy inner function
         inf_ext: inf_ext,
         inst_of: inst_of,
         define: define,
@@ -2830,7 +2847,8 @@
         cover: cover,
         notInstanceof: notInstanceof,
         ntfs: ntfs,
-        sourceFileAndCodeLine: sourceFileAndCodeLine
+        sourceFileAndCodeLine: sourceFileAndCodeLine,
+
     };
 
     var interfaces = {
