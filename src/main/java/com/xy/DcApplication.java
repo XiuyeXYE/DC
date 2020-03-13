@@ -29,7 +29,7 @@ import com.xiuye.util.log.LogUtil;
 @SpringBootApplication(exclude = { RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class,
 		DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @EnableCaching
-@EnableScheduling
+//@EnableScheduling
 @EnableWebSocket
 public class DcApplication /* extends CachingConfigurerSupport */ implements WebSocketConfigurer {
 
@@ -64,19 +64,15 @@ public class DcApplication /* extends CachingConfigurerSupport */ implements Web
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-		registry.addHandler(this.websocketHandler(), "*").addInterceptors(new HttpSessionHandshakeInterceptor());
-
-	}
-
-	@Bean
-	public TextWebSocketHandler websocketHandler() {
-		return new TextWebSocketHandler() {
+		registry.addHandler(new TextWebSocketHandler() {
 			@Override
 			protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 				super.handleTextMessage(session, message);
 				LogUtil.log("server received:", message);
+				session.sendMessage(new TextMessage("Hello,client.I received your msg!"));
 			}
-		};
+		}, "/im/user");//.addInterceptors(new HttpSessionHandshakeInterceptor());
+
 	}
 
 //	@Bean

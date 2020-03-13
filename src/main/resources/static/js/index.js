@@ -2,16 +2,16 @@
  * http://usejsdoc.org/
  */
 
-//xy.DEBUG_TIME = false;
+// xy.DEBUG_TIME = false;
 
 runtime(xy.ready,xy,
-/*xy("ready",*/()=>{
+/* xy("ready", */()=>{
 	xdebug("websocket demo");
 	
 	let ws = new WebSocket("ws://localhost:8080/im/user");
 	xdebug(ws);
 	
-	xy.extend(ws,{
+	xy.simpleCopy(ws,{
 		onopen(){
 			xdebug("websocket opened");
 			ws.send("websocket is opened in the front!")
@@ -26,6 +26,7 @@ runtime(xy.ready,xy,
 			xdebug("websocket errors");
 		}
 	});
+//	xy.ws = ws;
 	
 });
 

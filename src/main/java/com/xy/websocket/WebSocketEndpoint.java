@@ -1,4 +1,4 @@
-package com.xy.controller;
+package com.xy.websocket;
 
 import java.io.IOException;
 
@@ -13,8 +13,10 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.xiuye.util.log.LogUtil;
 
-@ServerEndpoint("im/user")
-public class WebSocketController {
+
+//noly use for tomcat!
+@ServerEndpoint("im/user")//not available
+public class WebSocketEndpoint {
 
 	private Session session;
 	
