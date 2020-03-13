@@ -11,9 +11,9 @@ runtime(xy.ready,xy,
 	xdebug("websocket demo");
 	
 	let wss = new WebSocket("wss://"+document.location.host+"/im/user");
-	xdebug(ws);
+	xdebug(wss);
 	let i = 0;
-	xy.copy(ws,{
+	xy.copy(wss,{
 		onopen(){
 			xdebug("websocket opened");
 			wss.send("websocket is opened in the front!")
