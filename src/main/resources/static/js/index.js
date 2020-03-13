@@ -10,20 +10,20 @@ runtime(xy.ready,xy,
 /* xy("ready", */()=>{
 	xdebug("websocket demo");
 	
-	let ws = new WebSocket("ws://"+document.location.host+"/im/user");
+	let wss = new WebSocket("wss://"+document.location.host+"/im/user");
 	xdebug(ws);
 	let i = 0;
 	xy.copy(ws,{
 		onopen(){
 			xdebug("websocket opened");
-			ws.send("websocket is opened in the front!")
+			wss.send("websocket is opened in the front!")
 		},
 		onclose(){
 			xdebug("websocket close");
 		},
 		onmessage(msg){
 			xdebug("websocket receive msg:",msg);
-			ws.close();
+			wss.close();
 // ws.send(i++%1000);//repeat forever
 		},
 		onerror(e){
