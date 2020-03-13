@@ -10,7 +10,7 @@ runtime(xy.ready,xy,
 	
 	let ws = new WebSocket("ws://localhost:8080/im/user");
 	xdebug(ws);
-	
+	let i = 0;
 	xy.copy(ws,{
 		onopen(){
 			xdebug("websocket opened");
@@ -21,12 +21,16 @@ runtime(xy.ready,xy,
 		},
 		onmessage(msg){
 			xdebug("websocket receive msg:",msg);
+//			ws.close();
+//			ws.send(i++%1000);//repeat forever
 		},
-		onerror(){
-			xdebug("websocket errors");
+		onerror(e){
+			xdebug("websocket errors",e);
 		}
 	});
 //	xy.ws = ws;
+	
+	
 	
 });
 
