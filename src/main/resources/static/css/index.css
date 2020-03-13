@@ -32,17 +32,22 @@ div.layout {
 
 div.leftSidebar {
 	border: 1px solid green;
-	position: absolute;
-	top: 0;
+	float: left; top : 0;
 	left: 0;
 	height: 100%;
-	width: 220px;
+	width: 20%;
 	height: 100%;
+	top: 0;
 }
 
 div.rightContent {
 	border: 1px solid blue;
-	width: 100%;
+	width: 78%;
 	height: 100%;
-	padding-left: 220px;
+	float: left;
+	margin-left: 1%;
+}
+
+div.rightContent:after {
+	clear: left;
 }
