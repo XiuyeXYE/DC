@@ -11,7 +11,7 @@ runtime(xy.ready,xy,
 	let ws = new WebSocket("ws://localhost:8080/im/user");
 	xdebug(ws);
 	
-	xy.simpleCopy(ws,{
+	xy.copy(ws,{
 		onopen(){
 			xdebug("websocket opened");
 			ws.send("websocket is opened in the front!")

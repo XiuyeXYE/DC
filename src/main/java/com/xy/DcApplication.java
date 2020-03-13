@@ -13,15 +13,16 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import com.xiuye.util.log.LogUtil;
@@ -29,7 +30,7 @@ import com.xiuye.util.log.LogUtil;
 @SpringBootApplication(exclude = { RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class,
 		DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 @EnableCaching
-//@EnableScheduling
+@EnableScheduling
 @EnableWebSocket
 public class DcApplication /* extends CachingConfigurerSupport */ implements WebSocketConfigurer {
 
@@ -71,8 +72,16 @@ public class DcApplication /* extends CachingConfigurerSupport */ implements Web
 				LogUtil.log("server received:", message);
 				session.sendMessage(new TextMessage("Hello,client.I received your msg!"));
 			}
-		}, "/im/user");//.addInterceptors(new HttpSessionHandshakeInterceptor());
+		}, "/im/user");// .addInterceptors(new HttpSessionHandshakeInterceptor());
 
+	}
+
+	@Bean
+	@Primary
+	public ThreadPoolTaskScheduler taskScheduler() {
+		ThreadPoolTaskScheduler pool = new ThreadPoolTaskScheduler();
+		pool.setPoolSize(10);
+		return pool;
 	}
 
 //	@Bean
