@@ -33,8 +33,10 @@ runtime(xy.ready,xy,
 // xy.ws = ws;
 	
 	navigator.mediaDevices.getUserMedia({
-		audio:true,
-		video:true,
+		audio:false,
+		video:{
+			facingMode: 'user'
+		},
 	}).then(
 	(stream)=>{
 		
@@ -63,6 +65,7 @@ runtime(xy.ready,xy,
 // }
 	).catch((err)=>{
 		xdebug(err,err.name,err.message);
+		alert(err.message);
 	});
 	
 });
