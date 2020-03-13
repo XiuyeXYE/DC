@@ -21,17 +21,46 @@ runtime(xy.ready,xy,
 		},
 		onmessage(msg){
 			xdebug("websocket receive msg:",msg);
-//			ws.close();
-//			ws.send(i++%1000);//repeat forever
+			ws.close();
+// ws.send(i++%1000);//repeat forever
 		},
 		onerror(e){
 			xdebug("websocket errors",e);
 		}
 	});
-//	xy.ws = ws;
+// xy.ws = ws;
 	
-	
+	navigator.mediaDevices.getUserMedia({
+		audio:true,
+		video:true,
+	}).then(
+	(stream)=>{
+		
+		xdebug("open stream");
+		let ctx = new AudioContext();
+		ctx.createMediaStreamSource(stream).connect(ctx.destination);
+		xdebug("connected");
+		xdebug("dest:",ctx.destination);
+		xdebug(stream);
+		xdebug("audio tracks=",stream.getAudioTracks());
+		xdebug("video tracks=",stream.getVideoTracks());
+		xdebug("tracks=",stream.getTracks());
+		let video = xy.byId('mp4').get();
+		video.srcObject = stream;
+		video.onloadedmetadata = function(e) {
+		    video.play();
+		};
+	}
+// ,
+// (err)=>{
+// xdebug(err);
+// }
+	).catch((err)=>{
+		xdebug(err);
+	});
 	
 });
+
+
 
 

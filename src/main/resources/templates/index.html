@@ -14,11 +14,19 @@
 	
 	<div class="layout">
 		<div class="leftSidebar"></div>
-		<div class="rightContent"></div>
+		<div class="rightContent">
+			<div>
+				<audio src="/audio/aoteman.mp3" id="mp3" controls="controls"></audio>
+			</div>
+			<div>
+				<video id="mp4" controls="controls"></video>
+			</div>
+		</div>
 	</div>
 	
 	<div th:include="includes/common :: footer"></div>
 	<div th:include="includes/common :: extension"></div>
 	<script type="text/javascript" src="/js/index.js"></script>
+	
 </body>
 </html>

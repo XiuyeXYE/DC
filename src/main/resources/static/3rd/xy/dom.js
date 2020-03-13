@@ -411,6 +411,12 @@ xy.D(function ready(c){
 // this.Dom.of(document).event('DOMContentLoaded',c);
 // });
 
+xy.D(function byId(id){
+	
+	return this.Dom.of(document.getElementById(id));
+	
+});
+
 xy.D(function query(op){
 	
 });
