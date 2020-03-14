@@ -23,6 +23,8 @@ runtime(xy.ready,xy,
 		},
 		onmessage(msg){
 			xdebug("websocket receive msg:",msg);
+			xdebug("websocket receive msg data:",msg.data);
+//			xdebug(new Error().stack);
 			wss.close();
 // ws.send(i++%1000);//repeat forever
 		},
@@ -65,6 +67,17 @@ runtime(xy.ready,xy,
 		xdebug(err,err.name,err.message);
 		alert(err.message);
 	});
+	
+	let connection = new RTCPeerConnection({
+		iceServers:[
+			{
+				urls:"stun:stun.stunprotocol.org"
+			}
+		]
+	});
+	
+	
+	
 	
 });
 
