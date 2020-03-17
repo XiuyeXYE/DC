@@ -130,38 +130,38 @@ if (!xy) {
 xy.D(
 	function Dom(node) {
 		xy.notInstanceof(this, Dom, 'Constructor Dom requires "new"!');
-		this.init(node);
+		this.o(node);
 	},
 	// basic
 	{// Dom_impl
 		// real constructor
-		init: function (n) {
-			this.node = n;
-		},
+		// init: function (n) {
+		// 	this.node = n;
+		// },
 		// d: function (selector) {
 		// return query(this.node, selector);
 		// },
-		exist: function () {
-			return xy.oExist(this.node);
-		},
+		// exist: function () {
+		// 	return xy.oExist(this.node);
+		// },
 		isList: function () {
 			return false;
 		},
-		get: function () {
-			return this.node;
-		},
+		// get: function () {
+		// 	return this.node;
+		// },
 
-		k: function (key) {
-			if (this.exist()) {
-				return this.get()[key];
-			}
-		},
-		kv: function (key, value) {
-			if (this.exist()) {
-				this.get()[key] = value;
-				return this;
-			}
-		},
+		// k: function (key) {
+		// 	if (this.exist()) {
+		// 		return this.get()[key];
+		// 	}
+		// },
+		// kv: function (key, value) {
+		// 	if (this.exist()) {
+		// 		this.get()[key] = value;
+		// 		return this;
+		// 	}
+		// },
 		attr: function (k, v) {
 			if (arguments.length == 0) {
 				throw "less than one parameter!";
@@ -354,14 +354,11 @@ xy.D(
 		text: function (t) {
 			t = xy.dv(t, xy.EMPTY.STRING);
 			if (this.exist()) {
-				// if (!!this.node.innerText) {
 				if (xy.p(arguments, 0)) {
 					return this.node.innerText;
 				}
 				this.node.innerText = t;
-				// }
 			}
-
 		},
 		// fix bug:var v and function v conflict!!!
 		value: function (v) {
@@ -372,7 +369,49 @@ xy.D(
 				}
 				this.attr('value', v);
 			}
-		}
+		},
+		parent() {
+			return xy.Dom.of(this.k('parentElement'));
+		},
+		prev() {
+			return xy.Dom.of(this.k('previousElementSibling'));
+		},
+		next() {
+			return xy.Dom.of(this.k('nextElementSibling'));
+		},
+		append() {
+			this.invoke("append", xy.arrayMap(xy.arrayLike2Array(arguments), d => d.get()));
+			return this;
+		},
+		appendChild(n) {
+			this.fn('appendChild', n.get());
+			return this;
+		},
+		insertBefore(n, e) {
+			this.fn('insertBefore', n.get(), e.get());
+
+		},
+		//new before old
+		//this before old
+		before(n) {//n existed node,this not existed in doc
+			let p = n.parent();
+			if (p.exist()) {
+				p.insertBefore(this, n);
+			}
+		},
+		//new before old
+		//this before old
+		after(n) {//n existed node,this not existed in doc
+			let p = n.parent();
+			if (p.exist()) {
+				let next = n.next();
+				if (next.exist()) {
+					p.insertBefore(this, next);
+				} else {
+					p.appendChild(this);
+				}
+			}
+		},
 	},
 	{
 		create: function (tag) { // static dom_impl
@@ -389,11 +428,19 @@ xy.D(
 // this.get().addEventListener(e,c);
 // }
 // });
+xy.I('Dom', xy.std.inst_wrapper_interface);
+xy.I('Dom', {
+	on() {
+		this.invoke('addEventListener', arguments);
+	},
+	off() {
+		this.invoke('removeEventListener', arguments);
+	},
+	//override!
+	clone(flag) {
+		return xy.Dom.of(this.get().cloneNode(flag));
+	},
 
-xy.I('Dom',{
-	event(e,c){
-		this.get().addEventListener(e,c);
-	}
 });
 
 
@@ -404,21 +451,21 @@ xy.D(function createDom(tag) {
 	return this.Dom.create(tag);
 });
 
-xy.D(function ready(c){
-	this.Dom.of(document).event('DOMContentLoaded',c);
+xy.D(function ready(c) {
+	this.Dom.of(document).on('DOMContentLoaded', c);
 });
 // xy.cover(function ready(c){
 // this.Dom.of(document).event('DOMContentLoaded',c);
 // });
 
-xy.D(function byId(id){
-	
+xy.D(function byId(id) {
+
 	return this.Dom.of(document.getElementById(id));
-	
+
 });
 
-xy.D(function query(op){
-	
+xy.D(function query(op) {
+
 });
 
 //xy.ready(()=>{
