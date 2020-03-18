@@ -988,7 +988,7 @@
 
             var ps = EMPTY_VALUES.ARRAY;
             ps[0] = f;
-            
+
             for (var i = 0; i < args.length; i++) {
                 ps.push(args[i]);
             }
@@ -2781,7 +2781,7 @@
     }
 
     function functionApply(f, t, args) {
-        if (peq(arguments, 3) && fnExist(f)) {
+        if (/*peq(arguments, 3) && */fnExist(f)) {
             var ps = arrayLike2Array(args);
             return f.apply(t, ps);
         }
@@ -2790,10 +2790,15 @@
         }
     }
 
+    function functionCall(f, t) {
+        var ps = arrayLike2Array(args);
+        ps.splice(0, 2);
+        return functionApply(f, t);
+    }
 
     //9.Open API functions
 
-    var fn = {
+    var functions = {
         T: whatType,
         C: whatClass,
         isSymbol: isSymbol,
@@ -2885,7 +2890,8 @@
         ntfs: ntfs,
         sourceFileAndCodeLine: sourceFileAndCodeLine,
         copy: copy,
-        fn: functionApply
+        fy: functionApply,
+        fc: functionCall
     };
 
     var interfaces = {
@@ -2937,7 +2943,7 @@
 
     static_impl(xy, extend_interface);
 
-    xy.extend(fn);
+    xy.extend(functions);
     xy.extend(classes);
     xy.extend(parameters);
     xy.extend(interfaces);
@@ -2982,14 +2988,14 @@ function runtime() {
 }
 
 function property() {
-    xy.fn(console.dir, console, arguments);
+    xy.fy(console.dir, console, arguments);
 }
 
 function datatable() {
-    xy.fn(console.table, console, arguments);
+    xy.fy(console.table, console, arguments);
 }
 
 function assert() {
-    xy.fn(console.assert, console, arguments);
+    xy.fy(console.assert, console, arguments);
 }
 

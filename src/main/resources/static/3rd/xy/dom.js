@@ -429,16 +429,37 @@ xy.D(
 // }
 // });
 xy.I('Dom', xy.std.inst_wrapper_interface);
-xy.I('Dom', {
+xy.I('Dom', {//implementations
 	on() {
 		this.invoke('addEventListener', arguments);
 	},
 	off() {
 		this.invoke('removeEventListener', arguments);
 	},
+	once() {
+		//listener wrap:
+		let ps = xy.arrayLike2Array(arguments);
+		let eventCallbackListener = ps[1];
+		ps[1] = function () {
+			//the following code does not run in function in the beginning of time!
+			// xdebug(this);
+			xy.fy(eventCallbackListener, this, arguments);
+			xy.fy(this.removeEventListener, this, ps);
+		};
+		this.invoke('addEventListener', ps);
+	},
+	emit(e, d) {
+		return this.trigger(e, d);
+	},
+	trigger(e, d) {
+		if (this.exist() && xy.pnl(arguments, 1) && xy.fnExist(this.k('dispatchEvent'))) {
+			this.fn('dispatchEvent', new CustomEvent(e, { detail: d }));
+		}
+		return this;
+	},
 	//override!
 	clone(flag) {
-		return xy.Dom.of(this.get().cloneNode(flag));
+		return xy.Dom.of(this.fn('cloneNode', flag));
 	},
 
 });
