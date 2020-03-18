@@ -130,6 +130,7 @@ if (!xy) {
 xy.D(
 	function Dom(node) {
 		xy.notInstanceof(this, Dom, 'Constructor Dom requires "new"!');
+		this.events = new xy.HashMap();
 		this.o(node);
 	},
 	// basic
@@ -430,23 +431,52 @@ xy.D(
 // });
 xy.I('Dom', xy.std.inst_wrapper_interface);
 xy.I('Dom', {//implementations
+	registerEvent(e, c) {
+		let events = this.events.get(e);
+		if (!xy.isArray(events)) {
+			events = xy.EMPTY.ARRAY;
+			this.events.put(e, events);
+		}
+		if (xy.eq(events.indexOf(c), -1)) {
+			events.push(c);
+		}
+	},
+	unregisterEvent(e, c) {
+		let events = this.events.get(e);
+		if (!xy.isArray(events)) {
+			return;
+		}
+		let idx = -1;
+		if (!xy.eq(idx = events.indexOf(c), -1)) {
+			events.splice(idx, 1);
+		}
+	},
 	on() {
 		this.invoke('addEventListener', arguments);
+		this.registerEvent(arguments[0], arguments[1]);
+		return this;
 	},
 	off() {
 		this.invoke('removeEventListener', arguments);
+		this.unregisterEvent(arguments[0], arguments[1]);
+		return this;
 	},
 	once() {
 		//listener wrap:
 		let ps = xy.arrayLike2Array(arguments);
 		let eventCallbackListener = ps[1];
-		ps[1] = function () {
-			//the following code does not run in function in the beginning of time!
-			// xdebug(this);
-			xy.fy(eventCallbackListener, this, arguments);
-			xy.fy(this.removeEventListener, this, ps);
-		};
-		this.invoke('addEventListener', ps);
+		let that = this;
+		if (xy.fnExist(eventCallbackListener)) {
+			ps[1] = function () {
+				//the following code does not run in function in the beginning of time!
+				// xdebug(this);
+				xy.fy(eventCallbackListener, this, arguments);
+				xy.fy(that.off, that, ps);
+			};
+			// this.invoke('addEventListener', ps);
+			xy.fy(this.on, this, ps);
+		}
+		return this;
 	},
 	emit(e, d) {
 		return this.trigger(e, d);
