@@ -92,13 +92,144 @@ xy.D(function ajax(params) {
 	new this.Ajax().q(params);
 });
 
-xy.D(function getPublicNetworkIP(callback) {// kind C IP
+
+xy.D(function Socket(url, protocals) {
+	// this.base(url,protocals);//not extends class !
+	this.url = url;
+	this.protocals = protocals;
+	this.o(new WebSocket(url, protocals));
+	this.events = new xy.HashMap();
+
+	Object.defineProperties(this, {
+		onopen: {
+			get() {
+				return this.k('onopen');
+			},
+			set(callback) {
+				this.kv('onopen', callback);
+			},
+			enumerable: true,
+			configurable: true
+		},
+		onerror: {
+			get() {
+				return this.k('onerror');
+			},
+			set(callback) {
+				this.kv('onerror', callback);
+			},
+			enumerable: true,
+			configurable: true
+		},
+		onmessage: {
+			get() {
+				return this.k('onmessage');
+			},
+			set(callback) {
+				this.kv('onmessage', callback);
+			},
+			enumerable: true,
+			configurable: true
+		},
+		onclose: {
+			get() {
+				return this.k('onclose');
+			},
+			set(callback) {
+				this.kv('onclose', callback);
+			},
+			enumerable: true,
+			configurable: true
+		}
+	});
+}
+	, {//implementations event
+		registerEvent(e, c) {
+			let events = this.events.get(e);
+			if (!xy.isArray(events)) {
+				events = xy.EMPTY.ARRAY;
+				this.events.put(e, events);
+			}
+			if (xy.eq(events.indexOf(c), -1)) {
+				events.push(c);
+			}
+		},
+		unregisterEvent(e, c) {
+			let events = this.events.get(e);
+			if (!xy.isArray(events)) {
+				return;
+			}
+			let idx = -1;
+			if (!xy.eq(idx = events.indexOf(c), -1)) {
+				events.splice(idx, 1);
+			}
+		},
+		on() {
+			this.invoke('addEventListener', arguments);
+			this.registerEvent(arguments[0], arguments[1]);
+			return this;
+		},
+		off() {
+			this.invoke('removeEventListener', arguments);
+			this.unregisterEvent(arguments[0], arguments[1]);
+			return this;
+		},
+		once() {
+			//listener wrap:
+			let ps = xy.arrayLike2Array(arguments);
+			let eventCallbackListener = ps[1];
+			let that = this;
+			if (xy.fnExist(eventCallbackListener)) {
+				ps[1] = function () {
+					//the following code does not run in function in the beginning of time!
+					// xdebug(this);
+					xy.fy(eventCallbackListener, this, arguments);
+					xy.fy(that.off, that, ps);
+				};
+				// this.invoke('addEventListener', ps);
+				xy.fy(this.on, this, ps);
+			}
+			return this;
+		},
+		emit(e, d) {
+			return this.trigger(e, d);
+		},
+		trigger(e, d) {
+			if (this.exist() && xy.pnl(arguments, 1) && xy.fnExist(this.k('dispatchEvent'))) {
+				this.fn('dispatchEvent', new CustomEvent(e, { detail: d }));
+			}
+			return this;
+		},
+		send() {
+			this.invoke(arguments);
+		},
+		close() {
+			this.invoke(arguments);
+		}
+	},
+	xy.f2j(WebSocket)
+);
+
+
+xy.I('Socket', xy.std.inst_wrapper_interface);
+// xy.S('Socket',WebSocket);
+
+
+
+//common API
+xy.D(function ajaxPublicNetworkIP(callback) {// kind C IP
 	const ipAPI = 'http://api.ipify.org?format=json';
-	// fetch(ipAPI)
-	// .then(response => response.json())
-	// .then(data => data.ip).then(callback);
 	xy.ajax({
 		url: ipAPI,
 		success: callback
 	});
 });
+
+xy.D(function fetchPublicNetworkIP(callback) {// kind C IP
+	const ipAPI = 'http://api.ipify.org?format=json';
+	fetch(ipAPI)
+		.then(response => response.json())
+		.then(data => data.ip).then(callback);
+});
+
+

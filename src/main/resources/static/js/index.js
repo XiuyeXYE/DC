@@ -10,7 +10,8 @@ runtime(xy.ready, xy,
 /* xy("ready", */() => {
 		xdebug("websocket demo");
 
-		let wss = new WebSocket("wss://" + document.location.host + "/im/user");
+		let wss = new xy.Socket("wss://" + document.location.host + "/im/user");
+		// let wss = new WebSocket("wss://" + document.location.host + "/im/user");
 		xdebug(wss);
 		let i = 0;
 		xy.copy(wss, {
