@@ -35,6 +35,20 @@ runtime(xy.ready, xy,
 		});
 		// xy.ws = ws;
 
+		new Promise((resolve, reject) => {
+			let socket = new xy.Socket("wss://" + document.location.host + "/im/user");
+			socket.onopen = (e) => {
+				socket.send("Hello,Sever.Websocket opened!");
+			};
+			socket.onmessage = (e) => {
+				resolve(e);
+			};
+		}).then(d =>
+			d.data
+		).then(d => {
+			xdebug('client received :', d);
+		});
+
 		navigator.mediaDevices.getUserMedia({
 			audio: true,
 			video: true,
@@ -69,6 +83,8 @@ runtime(xy.ready, xy,
 			Swal.fire(err.name, err.message, 'error');
 		});
 
+
+
 		let connection = new RTCPeerConnection({
 			iceServers: [
 				{
@@ -77,6 +93,7 @@ runtime(xy.ready, xy,
 			]
 		});
 
+		
 
 
 
