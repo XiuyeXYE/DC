@@ -12,6 +12,7 @@ public class InfoServer {
 		System.out.println("server listening...");
 		while (true) {
 			Socket s = server.accept();
+			
 			String networkInfo = "\tLocalSocketAddress:" + s.getLocalSocketAddress() + " ;\n\t" + "LocalAddress:"
 					+ s.getLocalAddress() + " ;\n\t" + "LocalPort:" + s.getLocalPort() + " ;\n\t"
 					+ "RemoteSocketAddress:" + s.getRemoteSocketAddress() + " ;\n\t" + "InetAddress:"
