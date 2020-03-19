@@ -1,4 +1,4 @@
-package com.network;
+package com.xy.network;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
