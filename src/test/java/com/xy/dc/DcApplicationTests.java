@@ -15,5 +15,7 @@ class DcApplicationTests {
 		LogUtil.log(123);
 		XYCompiler.compileCode("",TypeUtil.createMap());
 	}
+	
+	
 
 }
