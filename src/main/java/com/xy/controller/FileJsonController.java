@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.xiuye.util.cls.TypeUtil;
-import com.xiuye.util.log.LogUtil;
+import com.xiuye.util.cls.XType;
+import com.xiuye.util.log.XLog;
 import com.xy.bean.Result;
 
 @RestController
@@ -57,7 +57,7 @@ public class FileJsonController {
 		filename = filename + sfx;
 		String path = directory + File.separator;
 		Files.copy(file.getInputStream(), Paths.get(path + filename));
-		Map<String, Object> fileInfo = TypeUtil.createMap();
+		Map<String, Object> fileInfo = XType.map();
 		fileInfo.put("date", date);
 		fileInfo.put("filename", filename);
 		fileInfo.put("path", path);
@@ -67,7 +67,7 @@ public class FileJsonController {
 	@RequestMapping("singleFileUpload")
 	public Result singleFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest req)
 			throws IOException {
-		List<Map<String, Object>> list = TypeUtil.createList();
+		List<Map<String, Object>> list = XType.list();
 		list.add(this.uploadFileHandler(file));
 		return Result.OK(list);
 	}
@@ -75,7 +75,7 @@ public class FileJsonController {
 	@RequestMapping("multipleFileUpload")
 	public Result multipleFileUpload(@RequestParam("files") MultipartFile[] files, HttpServletRequest req)
 			throws IOException {
-		List<Map<String, Object>> r = TypeUtil.createList();
+		List<Map<String, Object>> r = XType.list();
 		for (MultipartFile file : files) {
 			r.add(this.uploadFileHandler(file));
 		}
@@ -84,12 +84,12 @@ public class FileJsonController {
 
 	@RequestMapping("moveFile")
 	public Result moveFile(@RequestBody Map<String, Object> params) throws IOException {
-		List<Map<String, Object>> ps = TypeUtil.createList();
-		List<Map<String, Object>> fileInfos = TypeUtil.dynamic_cast(params.get("data"));
+		List<Map<String, Object>> ps = XType.list();
+		List<Map<String, Object>> fileInfos = XType.cast(params.get("data"));
 		for (Map<String, Object> file : fileInfos) {
-			String date = TypeUtil.dynamic_cast(file.get("date"));
-			String filename = TypeUtil.dynamic_cast(file.get("filename"));
-			String path = TypeUtil.dynamic_cast(file.get("path"));
+			String date = XType.cast(file.get("date"));
+			String filename = XType.cast(file.get("filename"));
+			String path = XType.cast(file.get("path"));
 
 			String directoryDir = ROOT + date;
 			Path directory = Paths.get(directoryDir);
@@ -113,11 +113,11 @@ public class FileJsonController {
 	@RequestMapping("requestFile")
 	public void requestFile(@RequestParam Map<String, Object> params, HttpServletResponse res) throws IOException {
 
-		String filename = TypeUtil.dynamic_cast(params.get("filename"));
+		String filename = XType.cast(params.get("filename"));
 		OutputStream os = res.getOutputStream();
 		Path path = Paths.get(filename);
 		if (Files.exists(path)) {
-			LogUtil.log(Files.readAllBytes(path));
+			XLog.log(Files.readAllBytes(path));
 			os.write(Files.readAllBytes(path));
 		}
 
@@ -131,7 +131,7 @@ public class FileJsonController {
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 				super.visitFile(file, attrs);
 
-				LogUtil.log(file, attrs);
+				XLog.log(file, attrs);
 				Files.deleteIfExists(file);
 
 				return FileVisitResult.CONTINUE;

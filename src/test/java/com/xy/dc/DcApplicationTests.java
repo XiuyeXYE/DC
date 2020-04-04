@@ -1,6 +1,6 @@
 package com.xy.dc;
 
-import com.xiuye.util.log.LogUtil;
+import com.xiuye.util.log.XLog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +10,7 @@ class DcApplicationTests {
 
 	@Test
 	void contextLoads() {
-		LogUtil.log(123);
+		XLog.log(123);
 	}
 
 }

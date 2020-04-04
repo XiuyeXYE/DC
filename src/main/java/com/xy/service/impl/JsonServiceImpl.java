@@ -9,8 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.xiuye.util.cls.TypeUtil;
-import com.xiuye.util.log.LogUtil;
+import com.xiuye.util.cls.XType;
+import com.xiuye.util.log.XLog;
 import com.xy.service.JsonService;
 
 @Service
@@ -26,16 +26,16 @@ public class JsonServiceImpl implements JsonService{
 	@Cacheable("json")
 	public Map<String, Object> json() {
 
-		Map<String, Object> res = TypeUtil.createMap();
+		Map<String, Object> res = XType.map();
 
 		res.put("success", true);
 		res.put("msg", "OK");
 		res.put("data", "data");
 		res.put("status", 200);
 
-		LogUtil.log("Be called!!!");
+		XLog.log("Be called!!!");
 
-//		LogUtil.log("redisTemplate=",redisTemplate);
+//		XLog.log("redisTemplate=",redisTemplate);
 		
 		return res;
 	}

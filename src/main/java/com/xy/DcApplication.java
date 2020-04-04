@@ -25,7 +25,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
-import com.xiuye.util.log.LogUtil;
+import com.xiuye.util.log.XLog;
 
 @SpringBootApplication(exclude = { RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class,
 		DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
@@ -37,7 +37,7 @@ public class DcApplication /* extends CachingConfigurerSupport */ implements Web
 	@CacheEvict(allEntries = true, cacheNames = { "json" })
 	@Scheduled(fixedDelay = 20000)
 	public void timer() {
-		LogUtil.log("clear all caches!!!");
+		XLog.log("clear all caches!!!");
 	}
 
 	public static void main(String[] args) {
@@ -69,7 +69,7 @@ public class DcApplication /* extends CachingConfigurerSupport */ implements Web
 			@Override
 			protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 				super.handleTextMessage(session, message);
-				LogUtil.log("server received:", message);
+				XLog.log("server received:", message);
 				session.sendMessage(new TextMessage("Hello,client.I received your msg!"));
 			}
 		}, "/im/user");// .addInterceptors(new HttpSessionHandshakeInterceptor());

@@ -11,7 +11,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 
-import com.xiuye.util.log.LogUtil;
+import com.xiuye.util.log.XLog;
 
 
 //noly use for tomcat!
@@ -23,22 +23,22 @@ public class WebSocketEndpoint {
 	@OnOpen
 	public void open(Session session,EndpointConfig config) {
 		this.session = session;
-		LogUtil.log("websocket open!");
+		XLog.log("websocket open!");
 	}
 	@OnClose
 	public void close() {
-		LogUtil.log("websocket close!");
+		XLog.log("websocket close!");
 	}
 	
 	@OnError
 	public void error(Session session, Throwable err) {
-		LogUtil.log("websocket error");
+		XLog.log("websocket error");
 		err.printStackTrace();
 	}
 	
 	@OnMessage
 	public void message(String msg) throws IOException {
-		LogUtil.log("websocket message!",msg);
+		XLog.log("websocket message!",msg);
 		session.getBasicRemote().sendText("Hello,client.I received your msg!");
 	}
 	
