@@ -146,13 +146,15 @@
 
     //Keys include symbol!
     function enumKeys(a) {
-        // var keys = Object.keys(a);
         var keys = EMPTY_VALUES.ARRAY;
-        for (var key in a) {
-            keys.push(key);
-        }
-        if (fnExist(Object.getOwnPropertySymbols)) {
-            keys = keys.concat(Object.getOwnPropertySymbols(a));
+        if (oExist(a)) {
+            // var keys = Object.keys(a);
+            for (var key in a) {
+                keys.push(key);
+            }
+            if (fnExist(Object.getOwnPropertySymbols)) {
+                keys = keys.concat(Object.getOwnPropertySymbols(a));
+            }
         }
         return keys;
     }
@@ -889,6 +891,9 @@
         o: function (o) {
             this.origin = o;
         },
+        exist: function () {
+            return oExist(this.get());
+        },
         /**
          * 返回原始对象
          */
@@ -983,16 +988,7 @@
 
             var ps = EMPTY_VALUES.ARRAY;
             ps[0] = f;
-            // if (isFunction(this.invoke.caller)) {
-            // 	ps[0] = this.invoke.caller.name;
-            // }
-            // var args = EMPTY_VALUES.ARRAY;
-            // if (p1(arguments)) {
-            // 	args = aorf || EMPTY_VALUES.ARRAY;
-            // } else if (pnl2(arguments)) {
-            // 	ps[0] = aorf;
-            // 	args = a || EMPTY_VALUES.ARRAY;
-            // }
+
             for (var i = 0; i < args.length; i++) {
                 ps.push(args[i]);
             }
@@ -2730,8 +2726,11 @@
         return codeLine.trim();
     }
 
-    function define(c, members, staticMembers, implStd = false) {
+    function define(c, members, staticMembers, implStd = false, fatherClazz) {
         if (fnExist(c) && strNonEmpty(c.name)) {
+            if (fnExist(fatherClazz)) {
+                ext(c, fatherClazz);
+            }
             if (implStd) {
                 impl(c, object_default_interfaces);
                 static_impl(c, static_default_interfaces);
@@ -2744,12 +2743,12 @@
         }
     }
 
-    function add(c, members, staticMembers, implStd = false) {//class or function
+    function add(c, members, staticMembers, implStd = false, fatherClazz) {//class or function
         if (fnExist(c) && strNonEmpty(c.name)) {
             if (oExist(xy[c.name])) {
                 throw new Error("xy." + c.name + " is existed,please using xy.cover!");
             }
-            c = define(c, members, staticMembers, implStd);
+            c = define(c, members, staticMembers, implStd, fatherClazz);
             xy[c.name] = c;
         }
         else {
@@ -2757,12 +2756,12 @@
         }
     }
 
-    function cover(c, members, staticMembers, implStd = false) {
+    function cover(c, members, staticMembers, implStd = false, fatherClazz) {
         if (fnExist(c) && strNonEmpty(c.name)) {
             if (!oExist(xy[c.name])) {
                 throw new Error("xy." + c.name + " is not existed,please using xy.add!");
             }
-            c = define(c, members, staticMembers, implStd);
+            c = define(c, members, staticMembers, implStd, fatherClazz);
             xy[c.name] = c;
         }
         else {
@@ -2784,11 +2783,42 @@
         }
     }
 
+    function E() {
+        var ps = arrayLike2Array(arguments);
+        if (pgt(ps, 1) && strNonEmpty(ps[0]) && fnExist(ps[0] = xy[ps[0]])) {
+            ext.apply(xy, ps);
+        }
+    }
 
+    function functionApply(f, t, args) {
+        if (/*peq(arguments, 3) && */fnExist(f)) {
+            var ps = arrayLike2Array(args);
+            return f.apply(t, ps);
+        }
+        else {
+            throw new Error("Three(3) parameters:function,this,arguments!Called by outer function!");
+        }
+    }
+
+    function functionCall(f, t) {
+        var ps = arrayLike2Array(args);
+        ps.splice(0, 2);
+        return functionApply(f, t);
+    }
+
+    function functionToJson(f) {
+        if (fnExist(f)) {
+            var funcObj = EMPTY_VALUES.OBJECT;
+            arrayForEach(enumKeys(f), function (d) {
+                funcObj[d] = f[d];
+            });
+            return funcObj;
+        }
+    }
 
     //9.Open API functions
 
-    var fn = {
+    var functions = {
         T: whatType,
         C: whatClass,
         isSymbol: isSymbol,
@@ -2867,10 +2897,11 @@
         ext: ext,
         impl: impl,
         static_impl: static_impl,
-        I: I,//for xy inner function
-        S: S,//for xy inner function
-        D: add,//for xy inner function
-        R: cover,//for xy inner function
+        I: I,//for xy inner function/clazz
+        S: S,//for xy inner function/clazz
+        D: add,//for xy inner function/clazz
+        R: cover,//for xy inner function/clazz
+        E: E,//for xy inner clazz
         inf_ext: inf_ext,
         inst_of: inst_of,
         define: define,
@@ -2880,6 +2911,9 @@
         ntfs: ntfs,
         sourceFileAndCodeLine: sourceFileAndCodeLine,
         copy: copy,
+        fy: functionApply,
+        fc: functionCall,
+        f2j: functionToJson,
     };
 
     var interfaces = {
@@ -2931,7 +2965,7 @@
 
     static_impl(xy, extend_interface);
 
-    xy.extend(fn);
+    xy.extend(functions);
     xy.extend(classes);
     xy.extend(parameters);
     xy.extend(interfaces);
@@ -2942,6 +2976,9 @@
     return xy;
 
 }));
+
+
+
 //common outer API
 function println() {
     if (xy.STDOUT_OPENED && console && console.log) {
@@ -2973,5 +3010,17 @@ function runtime() {
         if (xy.DEBUG_TIME) console.timeEnd(label);
     }
 
+}
+
+function property() {
+    xy.fy(console.dir, console, arguments);
+}
+
+function datatable() {
+    xy.fy(console.table, console, arguments);
+}
+
+function assert() {
+    xy.fy(console.assert, console, arguments);
 }
 

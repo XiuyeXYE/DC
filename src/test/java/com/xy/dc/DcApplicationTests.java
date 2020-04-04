@@ -12,5 +12,7 @@ class DcApplicationTests {
 	void contextLoads() {
 		XLog.log(123);
 	}
+	
+	
 
 }
