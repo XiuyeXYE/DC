@@ -106,6 +106,36 @@ public class RxJavaTest {
 		
 	}
 	
+	@Test
+	public void testRXJavaAPI3() {
+		Observable.create(d->{
+			d.onNext("ABC");
+			d.onNext("DEF");
+			XLog.log(d.isDisposed());
+			d.onNext("GHI");
+			d.onComplete();
+			d.onNext("end!");
+			XLog.log(d.isDisposed());
+		}).subscribe(XLog::log);
+	}
+	
+	@Test
+	public void testRXJava5() {
+		Flowable.fromCallable(()->{
+			XLog.log("fromCallable "+Thread.currentThread());
+			return "ABC";
+		}).subscribeOn(Schedulers.io())
+		.observeOn(Schedulers.single())
+		.observeOn(Schedulers.newThread())
+		.observeOn(Schedulers.computation())
+		.subscribe(d->{
+			XLog.log(d);
+			XLog.log("subscribe "+Thread.currentThread());
+		});
+		XLog.log("testRXJava5 "+Thread.currentThread());
+	}
+	
+	
 	
 	
 	
