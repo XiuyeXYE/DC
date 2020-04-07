@@ -32,5 +32,10 @@ public class Retrofit2Test {
 		
 		
 	}
+	
+	@Test
+	public void testRetrofit2API() {
+		
+	}
 
 }
