@@ -167,14 +167,16 @@ xy.D(
 			if (arguments.length == 0) {
 				throw "less than one parameter!";
 			} else if (arguments.length == 1) {
-				if (xy.oExist(this.node) && xy.fnExist(this.node.getAttribute)) {
-					return this.node.getAttribute(k);
-				}
+//				if (xy.oExist(this.node) && xy.fnExist(this.node.getAttribute)) {
+//					return this.node.getAttribute(k);
+//				}
+				this.fn("getAttribute",k);
 				return xy.EMPTY.STRING;
 			} else if (arguments.length >= 2) {
-				if (xy.oExist(this.node) && xy.fnExist(this.node.setAttribute)) {
-					this.node.setAttribute(k, v);
-				}
+//				if (xy.oExist(this.node) && xy.fnExist(this.node.setAttribute)) {
+//					this.node.setAttribute(k, v);
+//				}
+				this.fn("setAttribute",k,v);
 				return this;
 			}
 		},
@@ -258,79 +260,76 @@ xy.D(
 			}
 		},
 		clientWidth: function () {
-			if (this.exist() && xy.oExist(this.node.clientWidth)) {
-				return this.node.clientWidth;
+			if (this.exist()) {
+				return this.k('clientWidth');
 			}
 			return 0;
 		},
 		clientHeight: function () {
-			if (this.exist() && xy.oExist(this.node.clientHeight)) {
-				return this.node.clientHeight;
+			if (this.exist()) {
+				return this.k('clientHeight');
 			}
 			return 0;
 		},
 		clientTop: function () {
-			if (this.exist() && xy.oExist(this.node.clientTop)) {
-				return this.node.clientTop;
+			if (this.exist()) {
+				return this.k('clientTop');
 			}
 			return 0;
 		},
 		clientLeft: function () {
-			if (this.exist() && xy.oExist(this.node.clientLeft)) {
-				return this.node.clientLeft;
+			if (this.exist()) {
+				return this.k('clientLeft');
 			}
 			return 0;
 		},
 		offsetWidth: function () {
-			if (this.exist() && xy.oExist(this.node.offsetWidth)) {
-				return this.node.offsetWidth;
+			if (this.exist()) {
+				return this.k('offsetWidth');
 			}
 			return 0;
 		},
 		offsetHeight: function () {
-			if (this.exist() && xy.oExist(this.node.offsetHeight)) {
-				return this.node.offsetHeight;
+			if (this.exist()) {
+				return this.k('offsetHeight');
 			}
 			return 0;
 		},
 		offsetTop: function () {
-			if (this.exist() && xy.oExist(this.node.offsetTop)) {
-				return this.node.offsetTop;
+			if (this.exist()) {
+				return this.k('offsetTop');
 			}
 			return 0;
 		},
 		offsetLeft: function () {
-			if (this.exist() && xy.oExist(this.node.offsetLeft)) {
-				return this.node.offsetLeft;
+			if (this.exist()) {
+				return this.k('offsetLeft');
 			}
 			return 0;
 		},
 		rect: function () {
-			if (this.exist() && xy.fnExist(this.node.getBoundingClientRect)) {
-				return this.node.getBoundingClientRect();
-			}
-			return xy.EMPTY.OBJECT;
+			return this.fn('getBoundingClientRect');
 		},
 		width: function (w, u) {
 			u = u || 'px';
-			if (xy.p(arguments, 0)) {
+			if (xy.peq(arguments, 0)) {
 				return this.clientWidth();
-			} else if (pnl1(arguments) && isNumber(w)) {
+			} else if (xy.pnl(arguments,1) && xy.isNumber(w)) {
 				this.css('width', w + u);
 				return this;
 			}
 		},
 		height: function (h, u) {
 			u = u || 'px';
-			if (xy.p(arguments, 0)) {
+			if (xy.peq(arguments, 0)) {
 				return this.clientHeight();
-			} else if (pnl1(arguments) && isNumber(h)) {
+			} else if (xy.pnl(arguments,1) && xy.isNumber(h)) {
 				this.css('height', h + u);
 				return this;
 			}
 		},
 		full: function (h) {
-			if (xy.p(arguments, 0)) {
+			if (xy.peq(arguments, 0)) {
 				return this.k('outerHTML');
 			} else {
 				// will changes node,no return!
@@ -344,10 +343,12 @@ xy.D(
 				// 因为空字符串''也是false！！！
 				// 直接用吧，即可
 				// if (!!this.node.innerHTML) {
-				if (xy.p(arguments, 0)) {
-					return this.node.innerHTML;
+				if (xy.peq(arguments, 0)) {
+//					return this.node.innerHTML;
+					return this.k("innerHTML");
 				}
-				this.node.innerHTML = h;
+//				this.node.innerHTML = h;
+				this.kv("innerHTML",h);
 				// }
 			}
 
@@ -355,17 +356,18 @@ xy.D(
 		text: function (t) {
 			t = xy.dv(t, xy.EMPTY.STRING);
 			if (this.exist()) {
-				if (xy.p(arguments, 0)) {
-					return this.node.innerText;
-				}
-				this.node.innerText = t;
+//				if (xy.peq(arguments, 0)) {
+//					return this.node.innerText;
+//				}
+//				this.node.innerText = t;
+				this.kv('innerText',t);
 			}
 		},
 		// fix bug:var v and function v conflict!!!
 		value: function (v) {
 			v = xy.dv(v, xy.EMPTY.STRING);
 			if (this.exist()) {
-				if (xy.p(arguments, 0)) {
+				if (xy.peq(arguments, 0)) {
 					return this.attr('value');
 				}
 				this.attr('value', v);
